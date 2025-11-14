@@ -13,15 +13,10 @@ body {
     background: linear-gradient(to right, #ffecd2, #fcb69f);
     overflow: hidden;
     height: 100vh;
-}
-
-.container {
     text-align: center;
-    position: relative;
-    width: 100%;
-    height: 100%;
 }
 
+/* Header */
 h1 {
     font-size: 4em;
     color: #ff0066;
@@ -30,13 +25,34 @@ h1 {
     z-index: 2;
 }
 
-img.photo {
-    width: 300px;
-    border-radius: 20px;
-    margin-top: 20px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+@keyframes pop {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.2); }
+}
+
+/* Slideshow */
+.slideshow-container {
     position: relative;
+    width: 300px;
+    height: 300px;
+    margin: 20px auto;
     z-index: 2;
+}
+
+.slideshow-container img {
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.slideshow-container img.active {
+    opacity: 1;
 }
 
 /* Balloons */
@@ -44,7 +60,7 @@ img.photo {
     width: 50px;
     height: 70px;
     background-color: red;
-    border-radius: 50% 50% 50% 50%;
+    border-radius: 50%;
     position: absolute;
     bottom: -80px;
     left: 50%;
@@ -62,12 +78,6 @@ img.photo {
     bottom: -40px;
     left: 50%;
     transform: translateX(-50%);
-}
-
-/* Animations */
-@keyframes pop {
-    0% { transform: scale(1); }
-    100% { transform: scale(1.2); }
 }
 
 @keyframes floatUp {
@@ -91,23 +101,44 @@ img.photo {
 </style>
 </head>
 <body>
-<div class="container">
-    <h1 id="happy-birthday">Happy Birthday! Charess</h1>
-    <img src="charess.jpg" alt="Birthday Photo" class="photo">
-    <div class="balloons"></div>
-    <canvas id="confetti"></canvas>
+
+<h1 id="happy-birthday">Happy Birthday! Charess</h1>
+
+<!-- Slideshow -->
+<div class="slideshow-container">
+    <img src="charess.jpg" class="active" alt="Photo 1">
+    <img src="cha.jpg" alt="Photo 2">
 </div>
+
+<!-- Balloons -->
+<div class="balloons"></div>
+
+<!-- Confetti -->
+<canvas id="confetti"></canvas>
+
+<!-- Background music -->
+<audio id="bg-music" src="music.mp3" loop></audio>
+
 <script>
-// Text color change
+// Slideshow
+const slides = document.querySelectorAll('.slideshow-container img');
+let currentSlide = 0;
+function nextSlide() {
+    slides[currentSlide].classList.remove('active');
+    currentSlide = (currentSlide + 1) % slides.length;
+    slides[currentSlide].classList.add('active');
+}
+setInterval(nextSlide, 3000);
+
+// Header color change
 const h1 = document.getElementById('happy-birthday');
 setInterval(() => {
     h1.style.color = `hsl(${Math.random() * 360}, 100%, 50%)`;
 }, 500);
 
-// Balloons creation
+// Balloons
 const balloonContainer = document.querySelector('.balloons');
 const colors = ['#ff4d4d', '#ffcc00', '#4d94ff', '#ff66cc', '#66ff66'];
-
 for (let i = 0; i < 8; i++) {
     const balloon = document.createElement('div');
     balloon.classList.add('balloon');
@@ -156,26 +187,18 @@ function drawConfetti() {
     });
     requestAnimationFrame(drawConfetti);
 }
-
 drawConfetti();
 window.addEventListener('resize', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 });
-</script>
-    <!-- Existing content, balloons, confetti, etc. -->
 
-<!-- Add this at the end, before </body> -->
-<audio id="bg-music" src="music.mp3" loop></audio>
-
-<script>
-// Play music after user interaction
+// Background music (must click to play due to browser restrictions)
 document.body.addEventListener('click', () => {
     const audio = document.getElementById('bg-music');
     audio.play();
-}, { once: true }); // triggers only once
+}, { once: true });
 </script>
-</body>
-</html>
+
 </body>
 </html>
