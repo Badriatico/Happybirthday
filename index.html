@@ -20,14 +20,8 @@ body {
 h1 {
     font-size: 4em;
     color: #ff0066;
-    animation: pop 1s infinite alternate;
     position: relative;
     z-index: 2;
-}
-
-@keyframes pop {
-    0% { transform: scale(1); }
-    100% { transform: scale(1.2); }
 }
 
 /* Slideshow */
@@ -102,7 +96,7 @@ h1 {
 </head>
 <body>
 
-<h1 id="happy-birthday">Happy Birthday! Charess</h1>
+<h1 id="happy-birthday"></h1>
 
 <!-- Slideshow -->
 <div class="slideshow-container">
@@ -120,7 +114,26 @@ h1 {
 <audio id="bg-music" src="music.mp3" loop></audio>
 
 <script>
-// Slideshow
+// ----------- Typing animation for header -----------
+const headerText = "Happy Birthday! Charess";
+const h1 = document.getElementById('happy-birthday');
+let idx = 0;
+
+function typeWriter() {
+    if (idx < headerText.length) {
+        h1.innerHTML += headerText.charAt(idx);
+        idx++;
+        setTimeout(typeWriter, 150); // speed of typing
+    } else {
+        // Start color-changing effect after typing is done
+        setInterval(() => {
+            h1.style.color = `hsl(${Math.random() * 360}, 100%, 50%)`;
+        }, 500);
+    }
+}
+typeWriter();
+
+// ----------- Slideshow -----------
 const slides = document.querySelectorAll('.slideshow-container img');
 let currentSlide = 0;
 function nextSlide() {
@@ -130,13 +143,7 @@ function nextSlide() {
 }
 setInterval(nextSlide, 3000);
 
-// Header color change
-const h1 = document.getElementById('happy-birthday');
-setInterval(() => {
-    h1.style.color = `hsl(${Math.random() * 360}, 100%, 50%)`;
-}, 500);
-
-// Balloons
+// ----------- Balloons -----------
 const balloonContainer = document.querySelector('.balloons');
 const colors = ['#ff4d4d', '#ffcc00', '#4d94ff', '#ff66cc', '#66ff66'];
 for (let i = 0; i < 8; i++) {
@@ -148,7 +155,7 @@ for (let i = 0; i < 8; i++) {
     balloonContainer.appendChild(balloon);
 }
 
-// Confetti
+// ----------- Confetti -----------
 const canvas = document.getElementById('confetti');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
@@ -193,12 +200,12 @@ window.addEventListener('resize', () => {
     canvas.height = window.innerHeight;
 });
 
-// Background music (must click to play due to browser restrictions)
+// ----------- Background music -----------
 document.body.addEventListener('click', () => {
     const audio = document.getElementById('bg-music');
     audio.play();
 }, { once: true });
-</script>
 
+</script>
 </body>
 </html>
