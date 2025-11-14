@@ -97,7 +97,6 @@ img.photo {
     <div class="balloons"></div>
     <canvas id="confetti"></canvas>
 </div>
-<audio src="music.mp3" autoplay loop></audio>
 <script>
 // Text color change
 const h1 = document.getElementById('happy-birthday');
@@ -164,5 +163,19 @@ window.addEventListener('resize', () => {
     canvas.height = window.innerHeight;
 });
 </script>
+    <!-- Existing content, balloons, confetti, etc. -->
+
+<!-- Add this at the end, before </body> -->
+<audio id="bg-music" src="music.mp3" loop></audio>
+
+<script>
+// Play music after user interaction
+document.body.addEventListener('click', () => {
+    const audio = document.getElementById('bg-music');
+    audio.play();
+}, { once: true }); // triggers only once
+</script>
+</body>
+</html>
 </body>
 </html>
